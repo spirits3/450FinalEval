@@ -82,6 +82,7 @@ class MovieIntegrationTest(TestCase):
     def test_edit_movie(self):
         # Arrange : Données du film à éditer
         edit_movie = Movie.objects.get(title="Fight Club")
+
         edit_movie_data = {
             'title': edit_movie.title,
             'author': edit_movie.author,
@@ -110,32 +111,20 @@ class MovieIntegrationTest(TestCase):
         assert movie.length == 132
         assert movie.genre == "Thriller psychologic"
 
+    test_add_movie
 
 class UnitaryTest(TestCase):
-    def test_movie_count(self):
+    def test_movie_details(self):
         # Arrange :
-        movieTotal = Movie.objects.all().count()
-        result = movieTotal + 1
-        new_movie_data = {
-            'title': 'The Godfather',
-            'author': 'Francis Ford Coppola',
-            'length': 172,
-            'genre': 'Drama'
-            }
+        result = "The Godfather, Francis Ford Coppola, Drama"
 
-        # Act : Envoi d'une requête POST pour créer un nouveau film
-        client = Client()
-        response = client.post(reverse('add_movie'), data=new_movie_data)
-
-        # Assert
-        # Redirection vers la page de détail du film après sa création
-        self.assertRedirects(
-            response,
-            reverse('movieInfo', args=[1]),
-            status_code=302,
-            target_status_code=200
+        # Dont save this film (Mock)
+        newMovie = Movie.objects.create(
+            title='The Godfather',
+            author='Francis Ford Coppola',
+            length=172,
+            genre='Drama'
             )
 
         # Assert que le nombre total des films a bien augmenté d'un
-        assert Movie.objects.all().count() == result
-        assert movieTotal + 1 == Movie.objects.all().count()
+        assert newMovie.details() == result
