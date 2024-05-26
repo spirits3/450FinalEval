@@ -67,7 +67,8 @@ class EditMovieView(View):
         return render(request, 'edit_movie.html', {'form': form})
 
     def post(self, request, pk):
-        form = MovieForm(request.POST)
+        movie = get_object_or_404(Movie, pk=pk)
+        form = MovieForm(request.POST, instance=movie)
         if form.is_valid():
             print('post')
             edited_movie = form.save()
