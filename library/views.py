@@ -1,7 +1,8 @@
-from django.shortcuts import get_object_or_404, render,redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import Book, Movie
 from django.views import View
 from .forms import BookForm, MovieForm
+
 
 def index(request):
     """View function for home page of site."""
@@ -13,17 +14,24 @@ def index(request):
     num_visits = request.session.get('num_visits', 1)
     request.session['num_visits'] = num_visits+1
 
-    # Render the HTML template index.html with the data in the context variable.
+    # Render the HTML template index.html
+    # with the data in the context variable.
     return render(
         request,
         'index.html',
-        context={'num_books': num_books, 'num_visits': num_visits, 'num_movies': num_movies},
+        context={
+            'num_books': num_books,
+            'num_visits': num_visits,
+            'num_movies': num_movies
+            },
     )
+
 
 def book_info(request, pk):
     """View function for book info."""
     book = get_object_or_404(Book, pk=pk)
-    return render(request, "book_info.html", {'book':book})
+    return render(request, "book_info.html", {'book': book})
+
 
 class CreateBookView(View):
     def get(self, request):
@@ -37,13 +45,16 @@ class CreateBookView(View):
             # Rediriger vers la page de détail du livre nouvellement créé
             return redirect('bookInfo', pk=new_book.pk)
         else:
-            # Si le formulaire n'est pas valide, réafficher le formulaire avec les erreurs
+            # Si le formulaire n'est pas valide,
+            # réafficher le formulaire avec les erreurs
             return render(request, 'create_book.html', {'form': form})
+
 
 def movie_info(request, pk):
     """View function for book info."""
     movie = get_object_or_404(Movie, pk=pk)
-    return render(request, "movie_info.html", {'movie':movie})
+    return render(request, "movie_info.html", {'movie': movie})
+
 
 class AddMovieView(View):
     def get(self, request):
@@ -54,11 +65,13 @@ class AddMovieView(View):
         form = MovieForm(request.POST)
         if form.is_valid():
             new_movie = form.save()
-            # Rediriger vers la page de détail du livre nouvellement créé
+            # Rediriger vers la page de détail du film nouvellement créé
             return redirect('movieInfo', pk=new_movie.pk)
         else:
-            # Si le formulaire n'est pas valide, réafficher le formulaire avec les erreurs
+            # Si le formulaire n'est pas valide,
+            # réafficher le formulaire avec les erreurs
             return render(request, 'add_movie.html', {'form': form})
+
 
 class EditMovieView(View):
     def get(self, request, pk):
@@ -71,8 +84,9 @@ class EditMovieView(View):
         form = MovieForm(request.POST, instance=movie)
         if form.is_valid():
             edited_movie = form.save()
-            # Rediriger vers la page de détail du livre nouvellement éditée
+            # Rediriger vers la page de détail du film nouvellement éditée
             return redirect('movieInfo', pk=edited_movie.pk)
         else:
-            # Si le formulaire n'est pas valide, réafficher le formulaire avec les erreurs
+            # Si le formulaire n'est pas valide,
+            # réafficher le formulaire avec les erreurs
             return render(request, 'edit_movie.html', {'form': form})

@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+
 
 class Book(models.Model):
     author = models.CharField(max_length=50)
@@ -7,6 +7,7 @@ class Book(models.Model):
 
     def __str__(self):
         return f'{self.author} | {self.title}'
+
 
 class Movie(models.Model):
     title = models.CharField(max_length=50)
