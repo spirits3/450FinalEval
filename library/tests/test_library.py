@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from library.models import Book, Movie
+from unittest.mock import Mock
 
 class BookIntegrationTest(TestCase):
 
@@ -50,7 +51,6 @@ class MovieIntegrationTest(TestCase):
         client = Client()
         response = client.get(reverse('movieInfo', args=[1]))
 
-        print(response.content)
         assert "David Fincher" in response.content.decode("utf-8")
         assert "Fight Club" in response.content.decode("utf-8")
         assert "139" in response.content.decode("utf-8")
@@ -75,3 +75,22 @@ class MovieIntegrationTest(TestCase):
         assert movie.title == "Fight Club"
         assert movie.length == 132
         assert movie.genre == "Thriller psychologic"
+    
+class UnitaryTest(TestCase):
+    def test_movie_count(self):
+        #Arrange :
+        movieTotal = Movie.objects.all().count()
+        result = movieTotal + 1
+        new_movie_data = {'title': 'The Godfather', 'author': 'Francis Ford Coppola', 'length': 172, 'genre': 'Drama'}
+
+        # Act : Envoi d'une requête POST pour créer un nouveau film
+        client = Client()
+        response = client.post(reverse('add_movie'), data=new_movie_data)
+
+        # Assert
+        # Redirection vers la page de détail du film après sa création
+        self.assertRedirects(response, reverse('movieInfo', args=[1]), status_code=302, target_status_code=200)
+
+        # Assert que le nombre total des films a bien augmenté d'un
+        assert Movie.objects.all().count() == result
+        assert movieTotal + 1 == Movie.objects.all().count()
