@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('book/<int:pk>',views.book_info, name="bookInfo"),
+    path('book/add',views.CreateBookView.as_view(), name="add_book"),
     path('movie/<int:pk>',views.movie_info, name="movieInfo"),
     path('movie/add',views.AddMovieView.as_view(), name="add_movie")
-
 ]
