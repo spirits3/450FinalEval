@@ -21,6 +21,8 @@ from library import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('book/<int:pk>',views.book_info, name="bookiInfo"),
-    path('movie/<int:pk>',views.movie_info, name="movieInfo")
+    path('book/<int:pk>',views.book_info, name="bookInfo"),
+    path('movie/<int:pk>',views.movie_info, name="movieInfo"),
+    path('movie/add',views.AddMovieView.as_view(), name="add_movie")
+
 ]
