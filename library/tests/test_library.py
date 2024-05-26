@@ -21,11 +21,11 @@ class BookIntegrationTest(TestCase):
         assert book.title == "Pico Bogue"
 
 class MovieIntegrationTest(TestCase):
+    # Ajoute 3 entré en BD 
     def setUp(self):
-        Movie.objects.create(title='The lord of the rings: The fellowship of the ring', author='J. R. Tolkien', length=178, genre='Fantasy')
-        Movie.objects.create(title='Harry Potter and the goblet of fire', author='J. K. Rowling', length=157, genre='Fantasy')
         Movie.objects.create(title='Fight Club', author='David Fincher', length=139, genre='Thriller psychologic')
 
+    # Ajout un film via le site, et vérifie que le film soit bien crée en BD
     def test_add_movie(self):
         # Arrange : Données du nouveau film à ajouter
         new_movie_data = {'title': 'The Shawshank Redemption', 'author': 'Frank Darabont', 'length': 142, 'genre': 'Drama'}
@@ -36,13 +36,26 @@ class MovieIntegrationTest(TestCase):
 
         # Assert
         # Redirection vers la page de détail du film après sa création
-        self.assertRedirects(response, reverse('movieInfo', args=[4]), status_code=302, target_status_code=200)
+        self.assertRedirects(response, reverse('movieInfo', args=[2]), status_code=302, target_status_code=200)
         # Film créé correctement dans la BD
-        movie = Movie.objects.get(id=4)
+        movie = Movie.objects.get(id=2)
         assert movie.author == "Frank Darabont"
         assert movie.title == "The Shawshank Redemption"
         assert movie.length == 142
         assert movie.genre == "Drama"
+
+    def test_movie_info(self):
+        # test seulement si les films ont correctement été ajouté via la fixture dans la BD
+
+        client = Client()
+        response = client.get(reverse('movieInfo', args=[1]))
+
+        print(response.content)
+        assert "David Fincher" in response.content.decode("utf-8")
+        assert "Fight Club" in response.content.decode("utf-8")
+        assert "139" in response.content.decode("utf-8")
+        assert "Thriller psychologic" in response.content.decode("utf-8")
+    # édit un film et vérifie que le film soit bien sauvegarder en BD après édition
 
     def test_edit_movie(self):
         # Arrange : Données du film à éditer        
@@ -52,7 +65,6 @@ class MovieIntegrationTest(TestCase):
         # Act : Envoi d'une requête POST pour éditer un nouveau film
         client = Client()
         response = client.post(reverse('edit_movie', args=[1]), data=edit_movie_data)
-        print(response)
 
         # Assert
         # Redirection vers la page de détail du film après son édition
@@ -63,15 +75,3 @@ class MovieIntegrationTest(TestCase):
         assert movie.title == "Fight Club"
         assert movie.length == 132
         assert movie.genre == "Thriller psychologic"
-
-    def test_movie_are_correctly_added(self):
-        # test seulement si les films ont correctement été ajouté via la fixture dans la BD
-        lordOfTheRings = Movie.objects.get(title="The lord of the rings: The fellowship of the ring")
-        harryPotter = Movie.objects.get(title="Harry Potter and the goblet of fire")
-        assert lordOfTheRings.author == 'J. R. Tolkien'
-        assert lordOfTheRings.length==178
-        assert lordOfTheRings.genre == 'Fantasy'
-
-        assert harryPotter.author == 'J. K. Rowling'
-        assert harryPotter.length == 157
-        assert harryPotter.genre == 'Fantasy'
