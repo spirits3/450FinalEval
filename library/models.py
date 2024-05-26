@@ -17,6 +17,6 @@ class Movie(models.Model):
 
     def __str__(self):
         return f'{self.author} | {self.title} | {self.length} | {self.genre}'
-    
+
     def details(self):
         return f'{self.title}, {self.author}, {self.genre}'

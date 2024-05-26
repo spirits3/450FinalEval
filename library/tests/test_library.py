@@ -1,7 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from library.models import Book, Movie
-from unittest.mock import Mock
 
 
 class BookIntegrationTest(TestCase):
@@ -112,6 +111,7 @@ class MovieIntegrationTest(TestCase):
         assert movie.genre == "Thriller psychologic"
 
     test_add_movie
+
 
 class UnitaryTest(TestCase):
     def test_movie_details(self):
