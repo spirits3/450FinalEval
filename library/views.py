@@ -70,11 +70,9 @@ class EditMovieView(View):
         movie = get_object_or_404(Movie, pk=pk)
         form = MovieForm(request.POST, instance=movie)
         if form.is_valid():
-            print('post')
             edited_movie = form.save()
-            # Rediriger vers la page de détail du livre nouvellement créé
+            # Rediriger vers la page de détail du livre nouvellement éditée
             return redirect('movieInfo', pk=edited_movie.pk)
         else:
             # Si le formulaire n'est pas valide, réafficher le formulaire avec les erreurs
-            print('bug')
             return render(request, 'edit_movie.html', {'form': form})
