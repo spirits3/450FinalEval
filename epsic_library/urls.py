@@ -24,5 +24,7 @@ urlpatterns = [
     path('book/<int:pk>',views.book_info, name="bookInfo"),
     path('book/add',views.CreateBookView.as_view(), name="add_book"),
     path('movie/<int:pk>',views.movie_info, name="movieInfo"),
-    path('movie/add',views.AddMovieView.as_view(), name="add_movie")
+    path('movie/add',views.AddMovieView.as_view(), name="add_movie"),
+    path('movie/edit/<int:pk>',views.EditMovieView.as_view(), name="edit_movie")
+
 ]

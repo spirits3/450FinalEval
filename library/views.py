@@ -59,3 +59,21 @@ class AddMovieView(View):
         else:
             # Si le formulaire n'est pas valide, réafficher le formulaire avec les erreurs
             return render(request, 'add_movie.html', {'form': form})
+
+class EditMovieView(View):
+    def get(self, request, pk):
+        movie = get_object_or_404(Movie, pk=pk)
+        form = MovieForm(instance=movie)
+        return render(request, 'edit_movie.html', {'form': form})
+
+    def post(self, request, pk):
+        form = MovieForm(request.POST)
+        if form.is_valid():
+            print('post')
+            edited_movie = form.save()
+            # Rediriger vers la page de détail du livre nouvellement créé
+            return redirect('movieInfo', pk=edited_movie.pk)
+        else:
+            # Si le formulaire n'est pas valide, réafficher le formulaire avec les erreurs
+            print('bug')
+            return render(request, 'edit_movie.html', {'form': form})

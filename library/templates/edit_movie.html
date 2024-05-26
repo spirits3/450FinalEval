@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Ajouter un film</title>
+        <title>Editer un film</title>
     </head>
     <body>
-        <h1>Ajouter un film</h1>
+        <h1>Editer un film</h1>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ form }}
             <button type="submit">Enregistrer</button>
         </form>
     </body>
