@@ -4,7 +4,7 @@ URL configuration for epsic_library project.
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
 Examples:
-Function views
+Function 
     1. Add an import:  from my_app import views
     2. Add a URL to urlpatterns:  path('', views.home, name='home')
 Class-based views
@@ -21,5 +21,6 @@ from library import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('<int:pk>',views.book_info, name="info")
+    path('book/<int:pk>',views.book_info, name="bookiInfo"),
+    path('movie/<int:pk>',views.movie_info, name="movieInfo")
 ]
